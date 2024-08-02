@@ -16,9 +16,8 @@ RUN pnpm install
 # Copy the rest of the application code
 COPY . .
 
-RUN pnpm install -C docs
 # Run the build command (replace with your actual build command)
-RUN  pnpm run build:docs
+RUN  pnpm run build
 
 # Second stage: Use Nginx to serve the built static files
 FROM nginx:1.21
