@@ -16,6 +16,7 @@ RUN pnpm install
 # Copy the rest of the application code
 COPY . .
 
+RUN pnpm install -C docs
 # Run the build command (replace with your actual build command)
 RUN  pnpm run build:docs
 
