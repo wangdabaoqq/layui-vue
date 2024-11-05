@@ -37,7 +37,7 @@ jobs:
           git config --global user.email "614692339@qq.com"
 
           git checkout --orphan deploy  # 创建新的空分支
-          git --work-tree=docs add --all  # 将 docs 中的内容添加到工作树
+          git --work-tree=docs/dist add --all  # 将 docs 中的内容添加到工作树
           git --work-tree=docs commit -m "Deploy to gh-pages"
 
           git push origin deploy --force  # 强制推送到 gh-pages 分支
