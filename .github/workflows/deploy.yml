@@ -1,0 +1,50 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches:
+      - master  # 当 main 分支有新代码时触发（可根据实际情况修改）
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 检出仓库代码
+      - name: Check out the repository
+        uses: actions/checkout@v3
+
+      # 设置 Node.js 版本并安装 pnpm
+      - name: Set up Node.js and pnpm
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'  # 设置合适的 Node.js 版本
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      # 使用 pnpm 安装依赖
+      - name: Install dependencies
+        run: pnpm install
+
+      # 运行构建命令
+      - name: Build the project
+        run: pnpm run build
+
+      # 创建一个新的分支并将打包内容提交
+      - name: Deploy to gh-pages
+        run: |
+          git config --global user.name "wangdabaoqq"
+          git config --global user.email "614692339@qq.com"
+
+          git checkout --orphan deploy  # 创建新的空分支
+          git --work-tree=docs add --all  # 将 docs 中的内容添加到工作树
+          git --work-tree=docs commit -m "Deploy to gh-pages"
+
+          git push origin deploy --force  # 强制推送到 gh-pages 分支
+
+      # 清理工作树
+      - name: Clean up
+        run: |
+          rm -rf docs
+          git checkout -f master
+          git branch -D deploy
